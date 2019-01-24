@@ -1,5 +1,6 @@
 import socket
 import sys
+from Crypto.Cipher import AES
 
 HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
@@ -14,6 +15,18 @@ s.bind(server_address)
 
 # Listen for incoming connections
 s.listen(1)
+
+# Encryption of message
+def do_encrypt(message):
+    obj = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
+    ciphertext = obj.encrypt(message)
+    return ciphertext
+
+# Decryption of message
+def do_decrypt(ciphertext):
+    obj2 = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
+    message = obj2.decrypt(ciphertext)
+    return message
 
 while True:
     # Wait for a connection
